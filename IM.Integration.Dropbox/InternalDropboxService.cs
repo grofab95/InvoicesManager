@@ -1,11 +1,7 @@
 ﻿using Dropbox.Api;
 using Dropbox.Api.Files;
 using IM.Core.Interfaces;
-using IM.Core.Models;
 using Microsoft.Extensions.Logging;
-using System.Net.Http;
-using System.Text.Json;
-using System.Text;
 using IM.Integration.Dropbox.Configuration;
 using Microsoft.Extensions.Options;
 

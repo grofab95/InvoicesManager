@@ -1,4 +1,5 @@
 ﻿using IM;
+using IM.Core.Interfaces;
 using IM.Integration.Dropbox.Extensions;
 using IM.Integration.Gmail.Extensions;
 using Serilog;
@@ -30,7 +31,9 @@ try
         .AddGmailIntegration(builder.Configuration)
         .AddDropboxIntegration(builder.Configuration)
         .AddSingleton<Manager>()
-        .AddHostedService<App>();
+        .AddHostedService<App>()
+        .AddScoped<IAttachmentProcessor, AttachmentProcessor>()
+        .AddScoped<IPathProvider, InvoicePathProvider>();
     
     var app = builder.Build();
 

@@ -1,8 +1,4 @@
 ﻿using IM.Core.Interfaces;
-using IM.Tools;
-using System.IO;
-using IM.Core.Models;
-using SixLabors.ImageSharp;
 
 namespace IM;
 
