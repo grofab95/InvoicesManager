@@ -2,8 +2,8 @@
 using IM.Core.Interfaces;
 using IM.Integration.Dropbox;
 using IM.Integration.Dropbox.Configuration;
-using Im.Integration.Gmail;
-using Im.Integration.Gmail.Configuration;
+using IM.Integration.Gmail;
+using IM.Integration.Gmail.Configuration;
 using Serilog;
 
 SerilogConfiguration.Add();

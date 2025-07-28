@@ -6,11 +6,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM", "IM\IM.csproj", "{973F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integrations", "Integrations", "{B268EA8D-51A2-490A-A394-048758094910}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Im.Integration.Gmail", "Im.Integration.Gmail\Im.Integration.Gmail.csproj", "{ED2069A1-78C7-493F-8740-8E582FD96A92}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Integration.Dropbox", "IM.Integration.Dropbox\IM.Integration.Dropbox.csproj", "{0BF29834-3D12-4353-BB66-2285124673C7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Tools", "IM.Tools\IM.Tools.csproj", "{C358171D-82E9-43A9-B33D-866772CDF31C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Integration.Gmail", "IM.Integration.Gmail\IM.Integration.Gmail.csproj", "{F0F47B28-0165-4A6C-9DE5-F451758E549A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,10 +26,6 @@ Global
 		{973FB473-7704-4659-805E-D3C487C3302E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{973FB473-7704-4659-805E-D3C487C3302E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{973FB473-7704-4659-805E-D3C487C3302E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ED2069A1-78C7-493F-8740-8E582FD96A92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ED2069A1-78C7-493F-8740-8E582FD96A92}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ED2069A1-78C7-493F-8740-8E582FD96A92}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ED2069A1-78C7-493F-8740-8E582FD96A92}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0BF29834-3D12-4353-BB66-2285124673C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0BF29834-3D12-4353-BB66-2285124673C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BF29834-3D12-4353-BB66-2285124673C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -38,9 +34,13 @@ Global
 		{C358171D-82E9-43A9-B33D-866772CDF31C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C358171D-82E9-43A9-B33D-866772CDF31C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C358171D-82E9-43A9-B33D-866772CDF31C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0F47B28-0165-4A6C-9DE5-F451758E549A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0F47B28-0165-4A6C-9DE5-F451758E549A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0F47B28-0165-4A6C-9DE5-F451758E549A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0F47B28-0165-4A6C-9DE5-F451758E549A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{ED2069A1-78C7-493F-8740-8E582FD96A92} = {B268EA8D-51A2-490A-A394-048758094910}
 		{0BF29834-3D12-4353-BB66-2285124673C7} = {B268EA8D-51A2-490A-A394-048758094910}
+		{F0F47B28-0165-4A6C-9DE5-F451758E549A} = {B268EA8D-51A2-490A-A394-048758094910}
 	EndGlobalSection
 EndGlobal

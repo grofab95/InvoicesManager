@@ -6,11 +6,11 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using IM.Core.Interfaces;
 using IM.Core.Models;
-using Im.Integration.Gmail.Configuration;
+using IM.Integration.Gmail.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Im.Integration.Gmail;
+namespace IM.Integration.Gmail;
 
 public class InternalGmailService : IEmailService
 {

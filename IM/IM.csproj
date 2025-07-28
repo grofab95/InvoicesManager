@@ -14,7 +14,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\IM.Integration.Dropbox\IM.Integration.Dropbox.csproj" />
-      <ProjectReference Include="..\Im.Integration.Gmail\Im.Integration.Gmail.csproj" />
+      <ProjectReference Include="..\IM.Integration.Gmail\IM.Integration.Gmail.csproj" />
       <ProjectReference Include="..\IM.Tools\IM.Tools.csproj" />
     </ItemGroup>
 
