@@ -1,6 +1,9 @@
-﻿namespace IM.Core.Interfaces;
+﻿using IM.Core.Models;
 
-public class IEmailService
+namespace IM.Core.Interfaces;
+
+public interface IEmailService : IInit
 {
-    
+    Task<EmailData[]> GetNewMessages();
+    Task MarkAsProcessed(string emailMessageId);
 }

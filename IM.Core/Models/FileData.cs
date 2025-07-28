@@ -1,6 +1,3 @@
 ﻿namespace IM.Core.Models;
 
-public class FileData
-{
-    
-}
+public record FileData(byte[] FileBytes, string DropboxFolder, string FileName);

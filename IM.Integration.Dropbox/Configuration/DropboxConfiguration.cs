@@ -1,4 +1,4 @@
-﻿namespace IM.Core.Configuration;
+﻿namespace IM.Integration.Dropbox.Configuration;
 
 public class DropboxConfiguration
 {

@@ -1,6 +1,6 @@
 ﻿namespace IM.Core.Interfaces;
 
-public class IInit
+public interface IInit
 {
-    
+    Task Init();
 }

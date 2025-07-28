@@ -1,8 +1,46 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Core", "IM.Core\IM.Core.csproj", "{549DCF66-031E-4C41-9BAE-D5D19A79B31F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM", "IM\IM.csproj", "{973FB473-7704-4659-805E-D3C487C3302E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integrations", "Integrations", "{B268EA8D-51A2-490A-A394-048758094910}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Im.Integration.Gmail", "Im.Integration.Gmail\Im.Integration.Gmail.csproj", "{ED2069A1-78C7-493F-8740-8E582FD96A92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Integration.Dropbox", "IM.Integration.Dropbox\IM.Integration.Dropbox.csproj", "{0BF29834-3D12-4353-BB66-2285124673C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Tools", "IM.Tools\IM.Tools.csproj", "{C358171D-82E9-43A9-B33D-866772CDF31C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{549DCF66-031E-4C41-9BAE-D5D19A79B31F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{549DCF66-031E-4C41-9BAE-D5D19A79B31F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{549DCF66-031E-4C41-9BAE-D5D19A79B31F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{549DCF66-031E-4C41-9BAE-D5D19A79B31F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{973FB473-7704-4659-805E-D3C487C3302E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{973FB473-7704-4659-805E-D3C487C3302E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{973FB473-7704-4659-805E-D3C487C3302E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{973FB473-7704-4659-805E-D3C487C3302E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED2069A1-78C7-493F-8740-8E582FD96A92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED2069A1-78C7-493F-8740-8E582FD96A92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED2069A1-78C7-493F-8740-8E582FD96A92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED2069A1-78C7-493F-8740-8E582FD96A92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BF29834-3D12-4353-BB66-2285124673C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BF29834-3D12-4353-BB66-2285124673C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BF29834-3D12-4353-BB66-2285124673C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BF29834-3D12-4353-BB66-2285124673C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C358171D-82E9-43A9-B33D-866772CDF31C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C358171D-82E9-43A9-B33D-866772CDF31C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C358171D-82E9-43A9-B33D-866772CDF31C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C358171D-82E9-43A9-B33D-866772CDF31C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ED2069A1-78C7-493F-8740-8E582FD96A92} = {B268EA8D-51A2-490A-A394-048758094910}
+		{0BF29834-3D12-4353-BB66-2285124673C7} = {B268EA8D-51A2-490A-A394-048758094910}
 	EndGlobalSection
 EndGlobal

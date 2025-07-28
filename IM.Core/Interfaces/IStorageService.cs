@@ -1,6 +1,6 @@
 ﻿namespace IM.Core.Interfaces;
 
-public class IStorageService
+public interface IStorageService
 {
-    
+    Task<bool> UploadFile(byte[] fileBytes, string dropboxFolder, string fileName);
 }

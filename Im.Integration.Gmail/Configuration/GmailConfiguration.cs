@@ -1,4 +1,4 @@
-﻿namespace IM.Core.Configuration;
+﻿namespace Im.Integration.Gmail.Configuration;
 
 public class GmailConfiguration
 {
