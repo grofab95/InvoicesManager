@@ -1,9 +1,6 @@
 ﻿using IM;
-using IM.Core.Interfaces;
-using IM.Integration.Dropbox;
-using IM.Integration.Dropbox.Configuration;
-using IM.Integration.Gmail;
-using IM.Integration.Gmail.Configuration;
+using IM.Integration.Dropbox.Extensions;
+using IM.Integration.Gmail.Extensions;
 using Serilog;
 
 SerilogConfiguration.Add();
@@ -29,18 +26,10 @@ try
         .UseSerilog()
         .UseWindowsService();
     
-    builder.Services.Configure<GmailConfiguration>(
-        builder.Configuration.GetSection("Integrations:Gmail:Installed"));
-
-    builder.Services.Configure<DropboxConfiguration>(
-        builder.Configuration.GetSection("Integrations:Dropbox"));
-    
     builder.Services
+        .AddGmailIntegration(builder.Configuration)
+        .AddDropboxIntegration(builder.Configuration)
         .AddSingleton<Manager>()
-        .AddSingleton<InternalGmailService>()
-        .AddSingleton<IEmailService>(sp => sp.GetRequiredService<InternalGmailService>())
-        .AddSingleton<IInit>(sp => sp.GetRequiredService<InternalGmailService>())
-        .AddSingleton<IStorageService, InternalDropboxService>()
         .AddHostedService<App>();
     
     var app = builder.Build();
