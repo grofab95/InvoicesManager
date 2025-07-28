@@ -1,4 +1,5 @@
-﻿using IM.Core.Interfaces;
+﻿using IM.Core.Extensions;
+using IM.Core.Interfaces;
 using IM.Integration.Gmail.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

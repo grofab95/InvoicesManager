@@ -6,13 +6,13 @@ public class App : IHostedService
 {
     private readonly ILogger<App> _logger;
     private readonly IEnumerable<IInit> _initializers;
-    private readonly Manager _manager;
+    private readonly IManager _manager;
     
     private readonly CancellationTokenSource _cts = new CancellationTokenSource();
 
     public App(ILogger<App> logger,
         IEnumerable<IInit> initializers,
-        Manager manager)
+        IManager manager)
     {
         _logger = logger;
         _initializers = initializers;

@@ -10,6 +10,5 @@ public interface IAttachmentProcessor
 public class ProcessedAttachment
 {
     public byte[] FileBytes { get; set; }
-    public string OutputExtension { get; set; } = ".pdf";
 }
 

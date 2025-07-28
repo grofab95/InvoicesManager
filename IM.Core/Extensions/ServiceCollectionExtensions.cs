@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using IM.Core.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace IM.Core.Interfaces;
+namespace IM.Core.Extensions;
 
 public static class ServiceCollectionExtensions
 {
