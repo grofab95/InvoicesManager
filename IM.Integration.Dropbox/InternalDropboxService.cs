@@ -38,7 +38,7 @@ public class InternalDropboxService : IStorageService
                 WriteMode.Overwrite.Instance,
                 body: memStream);
 
-            _logger.LogInformation($"Uploaded: {result.PathDisplay}");
+            _logger.LogInformation("Uploaded: {Path}", result.PathDisplay);
             return true;
         }
         catch (Exception e)

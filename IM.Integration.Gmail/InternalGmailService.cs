@@ -20,20 +20,18 @@ public class InternalGmailService : IEmailService
     private readonly GmailService _gmailService;
     private Label _processedLabel;
     private Label _unknownLabel;
-    private readonly GmailConfiguration _configuration;
 
     public InternalGmailService(ILogger<InternalGmailService> logger,
         IOptions<GmailConfiguration> configuration)
     {
         _logger = logger;
-        _configuration = configuration.Value;
 
         var tokenPath = Path.Combine(@"C:\fgCode\IM", "token.json");
 
         var clientSecrets = new ClientSecrets
         {
-            ClientId = _configuration.Client_Id,
-            ClientSecret = _configuration.Client_Secret
+            ClientId = configuration.Value.Client_Id,
+            ClientSecret = configuration.Value.Client_Secret
         };
 
         var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
@@ -63,17 +61,16 @@ public class InternalGmailService : IEmailService
         {
             var results = new List<EmailData>();
 
-            // 1. List messages that don't have the processed label
             var listRequest = _gmailService.Users.Messages.List("me");
-            // Exclude messages with the processed label
             listRequest.Q = $"-label:{_processedLabel.Name} -label:{_unknownLabel.Name}";
-            listRequest.MaxResults = 50; // Adjust as needed
+            listRequest.MaxResults = 50;
             var listResponse = await listRequest.ExecuteAsync();
 
             if (listResponse.Messages == null || !listResponse.Messages.Any())
+            {
                 return results.ToArray();
+            }
 
-            // 2. Process each unprocessed message
             foreach (var msg in listResponse.Messages)
             {
                 var message = await _gmailService.Users.Messages.Get("me", msg.Id).ExecuteAsync();
@@ -82,7 +79,6 @@ public class InternalGmailService : IEmailService
                 if (message.Payload?.Parts == null)
                     continue;
 
-                // Find all image/jpeg attachments recursively
                 var imageMessageParts = FindAllAttachmentParts(message.Payload.Parts, "image/jpeg");
                 var documentMessageParts = FindAllAttachmentParts(message.Payload.Parts, "application/pdf");
 
@@ -102,7 +98,6 @@ public class InternalGmailService : IEmailService
                     {
                         continue;
                     }
-                    // Fix the base64 string by replacing URL-safe characters and adding padding if needed
                     var normalizedBase64 = NormalizeBase64String(attachment.Data);
                     var type = part.MimeType == "application/pdf" 
                         ? AttachmentType.Document
@@ -130,7 +125,6 @@ public class InternalGmailService : IEmailService
         catch (Exception e)
         {
             _logger.LogError(e, "Error getting new messages");
-
             return [];
         }
     }
@@ -161,25 +155,19 @@ public class InternalGmailService : IEmailService
                 email.Subject, email.MessageId, label.Name);
         }
     }
-    
-    /// <summary>
-    /// Gets an existing label by name or creates a new one if it doesn't exist
-    /// </summary>
+
     private async Task<Label> GetOrCreateLabelAsync(string labelName)
     {
         try
         {
-            // First try to get all labels
             var labels = await _gmailService.Users.Labels.List("me").ExecuteAsync();
             var existingLabel = labels.Labels.FirstOrDefault(l => l.Name == labelName);
 
-            // If label exists, return it
             if (existingLabel != null)
             {
                 return existingLabel;
             }
 
-            // Otherwise create a new label
             var newLabel = new Label
             {
                 Name = labelName,
@@ -191,12 +179,11 @@ public class InternalGmailService : IEmailService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error getting or creating label: {labelName}");
+            _logger.LogError(ex, "Error getting or creating label: {LabelName}", labelName);
             throw;
         }
     }
 
-    // Recursively find all parts with the given mimeType
     private List<MessagePart> FindAllAttachmentParts(IList<MessagePart> parts, string mimeType)
     {
         var found = new List<MessagePart>();
@@ -214,24 +201,20 @@ public class InternalGmailService : IEmailService
         }
         return found;
     }
-    
-    /// <summary>
-    /// Normalizes a base64 string that might be using URL-safe encoding or missing padding
-    /// </summary>
+
     private string NormalizeBase64String(string base64)
     {
         try
         {
-            // Replace URL-safe characters with standard Base64 characters
             base64 = base64.Replace('-', '+').Replace('_', '/');
 
-            // Add padding if needed
             switch (base64.Length % 4)
             {
                 case 2: base64 += "=="; break;
                 case 3: base64 += "="; break;
             }
-            Convert.FromBase64String(base64);
+            _ = Convert.FromBase64String(base64);
+            
             return base64;
         }
         catch (Exception ex)
