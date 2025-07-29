@@ -40,7 +40,7 @@ public class Manager : IManager
             
             if (processingResult.Success)
             {
-                await _emailService.MarkAsProcessed(email.MessageId);
+                await _emailService.MarkAsProcessed(email);
             }
         }
     }

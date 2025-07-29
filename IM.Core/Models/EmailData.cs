@@ -9,4 +9,4 @@ public enum AttachmentType
 
 public record AttachmentData(string Name, AttachmentType Type, string Base64);
 
-public record EmailData(string MessageId, DateTime Date, AttachmentData[] Attachments);
+public record EmailData(string MessageId, string Subject, DateTime Date, AttachmentData[] Attachments);

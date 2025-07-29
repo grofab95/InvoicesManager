@@ -5,5 +5,5 @@ namespace IM.Core.Interfaces;
 public interface IEmailService : IInit
 {
     Task<EmailData[]> GetNewMessages();
-    Task MarkAsProcessed(string emailMessageId);
+    Task MarkAsProcessed(EmailData email);
 }

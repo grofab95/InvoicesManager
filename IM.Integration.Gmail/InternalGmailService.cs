@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Google.Apis.Auth.OAuth2;
+﻿using Google.Apis.Auth.OAuth2;
 using Google.Apis.Gmail.v1;
 using Google.Apis.Gmail.v1.Data;
 using Google.Apis.Services;
@@ -17,7 +16,7 @@ public class InternalGmailService : IEmailService
     private const string ProcessedLabelName = "PROCESSED"; 
     private const string UnknownLabelName = "UNKNOWN"; 
     
-    private readonly ILogger _logger;
+    private readonly ILogger<InternalGmailService> _logger;
     private readonly GmailService _gmailService;
     private Label _processedLabel;
     private Label _unknownLabel;
@@ -29,8 +28,7 @@ public class InternalGmailService : IEmailService
         _logger = logger;
         _configuration = configuration.Value;
 
-        var basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-        var tokenPath = Path.Combine(basePath, "token.json");
+        var tokenPath = Path.Combine(@"C:\fgCode\IM", "token.json");
 
         var clientSecrets = new ClientSecrets
         {
@@ -79,6 +77,7 @@ public class InternalGmailService : IEmailService
             foreach (var msg in listResponse.Messages)
             {
                 var message = await _gmailService.Users.Messages.Get("me", msg.Id).ExecuteAsync();
+                var subject = message.Payload?.Headers?.FirstOrDefault(h => h.Name == "Subject")?.Value ?? string.Empty;
                 var date = DateTimeOffset.FromUnixTimeMilliseconds(message.InternalDate ?? -1).DateTime;
                 if (message.Payload?.Parts == null)
                     continue;
@@ -115,13 +114,14 @@ public class InternalGmailService : IEmailService
                         normalizedBase64));
                 }
 
+                var emailData = new EmailData(message.Id, subject, date, attachments.ToArray());
                 if (attachments.Count > 0)
                 {
-                    results.Add(new EmailData(message.Id, date, attachments.ToArray()));
+                    results.Add(emailData);
                 }
                 else
                 {
-                    await MarkMessage(message.Id, _unknownLabel);
+                    await MarkMessage(emailData, _unknownLabel);
                 }
             }
 
@@ -135,12 +135,12 @@ public class InternalGmailService : IEmailService
         }
     }
 
-    public async Task MarkAsProcessed(string emailMessageId)
+    public async Task MarkAsProcessed(EmailData email)
     {
-        await MarkMessage(emailMessageId, _processedLabel);
+        await MarkMessage(email, _processedLabel);
     }
     
-    private async Task MarkMessage(string emailMessageId, Label label)
+    private async Task MarkMessage(EmailData email, Label label)
     {
         try
         {
@@ -150,15 +150,15 @@ public class InternalGmailService : IEmailService
                 RemoveLabelIds = new List<string> { "INBOX" }
             };
             
-            await _gmailService.Users.Messages.Modify(modifyMessageRequest, "me", emailMessageId).ExecuteAsync();
-            
-            _logger.LogInformation("Email {EmailMessageId} marked with label {LabelName}",
-                emailMessageId, label.Name);
+            await _gmailService.Users.Messages.Modify(modifyMessageRequest, "me", email.MessageId).ExecuteAsync();
+
+            _logger.LogInformation("Email '{Subject}' ({EmailMessageId}) marked with label {LabelName}",
+                email.Subject, email.MessageId, label.Name);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error marking email {EmailMessageId} with label {LabelName}",
-                emailMessageId, label.Name);
+            _logger.LogError(ex, "Error marking email '{Subject}' ({EmailMessageId}) with label {LabelName}",
+                email.Subject, email.MessageId, label.Name);
         }
     }
     
@@ -172,13 +172,13 @@ public class InternalGmailService : IEmailService
             // First try to get all labels
             var labels = await _gmailService.Users.Labels.List("me").ExecuteAsync();
             var existingLabel = labels.Labels.FirstOrDefault(l => l.Name == labelName);
-            
+
             // If label exists, return it
             if (existingLabel != null)
             {
                 return existingLabel;
             }
-            
+
             // Otherwise create a new label
             var newLabel = new Label
             {
@@ -186,7 +186,7 @@ public class InternalGmailService : IEmailService
                 LabelListVisibility = "labelShow",
                 MessageListVisibility = "show"
             };
-            
+
             return await _gmailService.Users.Labels.Create(newLabel, "me").ExecuteAsync();
         }
         catch (Exception ex)
@@ -224,17 +224,14 @@ public class InternalGmailService : IEmailService
         {
             // Replace URL-safe characters with standard Base64 characters
             base64 = base64.Replace('-', '+').Replace('_', '/');
-            
+
             // Add padding if needed
             switch (base64.Length % 4)
             {
                 case 2: base64 += "=="; break;
                 case 3: base64 += "="; break;
             }
-            
-            // Verify the string can be decoded
             Convert.FromBase64String(base64);
-            
             return base64;
         }
         catch (Exception ex)
