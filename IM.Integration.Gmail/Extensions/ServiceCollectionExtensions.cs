@@ -15,6 +15,6 @@ public static class ServiceCollectionExtensions
         services.Configure<GmailConfiguration>(
             configuration.GetSection("Integrations:Gmail:Installed"));
         
-        return services.AddInitializableService<InternalGmailService, IEmailService, IInit>();
+        return services.AddInitializableService<InternalGmailService, IEmailService>();
     }
 }

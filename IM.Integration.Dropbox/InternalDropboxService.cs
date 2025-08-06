@@ -1,5 +1,4 @@
-﻿using Dropbox.Api;
-using Dropbox.Api.Files;
+﻿using System.Text.Json;
 using IM.Core.Interfaces;
 using Microsoft.Extensions.Logging;
 using IM.Integration.Dropbox.Configuration;
@@ -10,13 +9,16 @@ namespace IM.Integration.Dropbox;
 public class InternalDropboxService : IStorageService
 {
     private readonly ILogger<InternalDropboxService> _logger;
-    private readonly DropboxClient _client;
+    private readonly HttpClient _httpClient;
+    private readonly DropboxConfiguration _configuration;
     
     public InternalDropboxService(ILogger<InternalDropboxService> logger,
-        IOptions<DropboxConfiguration> configuration)
+        IOptions<DropboxConfiguration> configuration,
+        HttpClient httpClient)
     {
         _logger = logger;
-        _client = new DropboxClient(configuration.Value.AccessToken);
+        _httpClient = httpClient;
+        _configuration = configuration.Value;
     }
     
     public async Task<bool> UploadFile(byte[] fileBytes, string dropboxFolder, string fileName)
@@ -29,21 +31,44 @@ public class InternalDropboxService : IStorageService
             if (!dropboxFolder.EndsWith("/"))
                 dropboxFolder += "/";
 
-            string dropboxPath = dropboxFolder + fileName;
+            var dropboxPath = dropboxFolder + fileName;
 
-            using var memStream = new MemoryStream(fileBytes);
+            var requestUri = "https://content.dropboxapi.com/2/files/upload";
 
-            var result = await _client.Files.UploadAsync(
-                dropboxPath,
-                WriteMode.Overwrite.Instance,
-                body: memStream);
+            var dropboxArgs = new
+            {
+                path = dropboxPath,
+                mode = "add", 
+                autorename = false,
+                mute = false,
+                strict_conflict = false
+            };
 
-            _logger.LogInformation("Uploaded: {Path}", result.PathDisplay);
+            using var content = new ByteArrayContent(fileBytes);
+            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+
+            var request = new HttpRequestMessage(HttpMethod.Post, requestUri)
+            {
+                Content = content
+            };
+
+            request.Headers.Add("Dropbox-API-Arg", JsonSerializer.Serialize(dropboxArgs));
+
+            var response = await _httpClient.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorDetails = await response.Content.ReadAsStringAsync();
+                _logger.LogError("Upload failed. Status: {Status}. Body: {Body}", response.StatusCode, errorDetails);
+                return false;
+            }
+
+            _logger.LogInformation("Upload successful for {Path}", dropboxPath);
             return true;
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            _logger.LogError(e, "UploadFile error");
+            _logger.LogError(ex, "UploadFile error");
             return false;
         }
     }

@@ -2,5 +2,7 @@
 
 public class DropboxConfiguration
 {
-    public string AccessToken { get; set; } = "";
+    public string AuthCode { get; set; } = "";
+    public string AppKey { get; set; } = "";
+    public string AppSecret { get; set; } = "";
 }
