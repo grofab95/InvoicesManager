@@ -2,5 +2,5 @@
 
 public interface IInit
 {
-    Task Init();
+    Task Init(CancellationToken cancellationToken);
 }

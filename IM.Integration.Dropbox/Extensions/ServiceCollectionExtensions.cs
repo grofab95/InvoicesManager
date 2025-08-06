@@ -1,4 +1,5 @@
-﻿using IM.Core.Interfaces;
+﻿using IM.Core.Extensions;
+using IM.Core.Interfaces;
 using IM.Integration.Dropbox.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,9 +15,7 @@ public static class ServiceCollectionExtensions
     {
         services.Configure<DropboxConfiguration>(configuration.GetSection("Integrations:Dropbox"));
 
-        services.AddSingleton<DropboxTokenValidator>();
-        services.AddSingleton<IDropboxTokenValidator>(sp => sp.GetRequiredService<DropboxTokenValidator>());
-        services.AddSingleton<IHostedService>(sp => sp.GetRequiredService<DropboxTokenValidator>());
+        services.AddInitializableService<DropboxTokenValidator, IDropboxTokenValidator>(); 
 
         services.AddScoped<DropboxAuthHandler>();
 

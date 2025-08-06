@@ -49,7 +49,7 @@ public class InternalGmailService : IEmailService
         });
     }
     
-    public async Task Init()
+    public async Task Init(CancellationToken cancellationToken)
     {
         _processedLabel = await GetOrCreateLabelAsync(ProcessedLabelName);
         _unknownLabel = await GetOrCreateLabelAsync(UnknownLabelName);

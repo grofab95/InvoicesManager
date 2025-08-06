@@ -3,13 +3,12 @@ using System.Text.Json;
 using IM.Integration.Dropbox.Configuration;
 using IM.Integration.Dropbox.Extensions;
 using IM.Integration.Dropbox.Models;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace IM.Integration.Dropbox;
 
-public class DropboxTokenValidator : IDropboxTokenValidator, IHostedService
+public class DropboxTokenValidator : IDropboxTokenValidator
 {
     private const string TokenFile = @"C:\fgCode\IM\Dropbox\token.json";
     
@@ -41,7 +40,7 @@ public class DropboxTokenValidator : IDropboxTokenValidator, IHostedService
         return _tokenData.AccessToken;
     }
 
-    private async Task<TokenData> LoadTokenFromFileAsync()
+    private async Task<TokenData> LoadTokenFromFile()
     {
         var json = await File.ReadAllTextAsync(TokenFile);
         return JsonSerializer.Deserialize<TokenData>(json)!;
@@ -58,7 +57,7 @@ public class DropboxTokenValidator : IDropboxTokenValidator, IHostedService
         try
         {
             using var httpClient = _httpClientFactory.CreateClient();
-            var request = new HttpRequestMessage(HttpMethod.Post, "oauth2/token")
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.dropboxapi.com/oauth2/token")
             {
                 Content = new FormUrlEncodedContent(new Dictionary<string, string>
                 {
@@ -75,6 +74,8 @@ public class DropboxTokenValidator : IDropboxTokenValidator, IHostedService
 
             tokenData.ExpiresAt = DateTime.UtcNow.AddSeconds(tokenData.ExpiresIn);
             
+            _logger.LogInformation("Dropbox token refreshed successfully. New expiry: {Expiry}", tokenData.ExpiresAt);
+            
             return tokenData;
         }
         catch (Exception e)
@@ -84,10 +85,8 @@ public class DropboxTokenValidator : IDropboxTokenValidator, IHostedService
         }
     }
 
-    public async Task StartAsync(CancellationToken cancellationToken)
+    public async Task Init(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Starting Dropbox Token Validator...");
-
         if (!File.Exists(TokenFile))
         {
             await GetTokens(cancellationToken);
@@ -95,7 +94,7 @@ public class DropboxTokenValidator : IDropboxTokenValidator, IHostedService
 
         try
         {
-            _tokenData = await LoadTokenFromFileAsync();
+            _tokenData = await LoadTokenFromFile();
             if (_tokenData.IsExpired())
             {
                 _tokenData = await RefreshToken(_tokenData.RefreshToken, cancellationToken);
@@ -139,10 +138,5 @@ public class DropboxTokenValidator : IDropboxTokenValidator, IHostedService
         {
             _logger.LogError(e, "Error getting Dropbox tokens");
         }
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
     }
 }

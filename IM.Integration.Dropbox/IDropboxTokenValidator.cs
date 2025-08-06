@@ -1,6 +1,8 @@
-﻿namespace IM.Integration.Dropbox;
+﻿using IM.Core.Interfaces;
 
-public interface IDropboxTokenValidator
+namespace IM.Integration.Dropbox;
+
+public interface IDropboxTokenValidator : IInit
 {
     Task<string> EnsureValidToken(CancellationToken cancellationToken);
 }

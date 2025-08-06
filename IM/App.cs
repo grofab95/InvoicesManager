@@ -21,7 +21,7 @@ public class App : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        await InitServices();
+        await InitServices(cancellationToken);
         
         _ = Task.Factory.StartNew(Loop, TaskCreationOptions.LongRunning);
     }
@@ -46,13 +46,15 @@ public class App : IHostedService
         }
     }
     
-    private async Task InitServices()
+    private async Task InitServices(CancellationToken cancellationToken)
     {
         _logger.LogInformation("InitServices");
         
         foreach (var initializer in _initializers)
         {
-            await initializer.Init();
+            _logger.LogInformation("Initializing {Name}", initializer.GetType().Name);
+            
+            await initializer.Init(cancellationToken);
         }
     }
     
