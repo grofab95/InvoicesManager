@@ -69,6 +69,14 @@ public class DropboxTokenValidator : IDropboxTokenValidator
             };
             
             var response = await httpClient.SendAsync(request, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var details = await response.Content.ReadAsStringAsync(cancellationToken);
+                
+                throw new Exception($"Failed to refresh token. Status: {response.StatusCode}. Details: {details}");
+            }
+            
             var tokenData = await response.Content.ReadFromJsonAsync<TokenData>(cancellationToken) 
                    ?? throw new Exception("Failed to refresh token");
 
@@ -127,6 +135,13 @@ public class DropboxTokenValidator : IDropboxTokenValidator
 
             var response = await httpClient.SendAsync(request, cancellationToken);
 
+            if (!response.IsSuccessStatusCode)
+            {
+                var details = await response.Content.ReadAsStringAsync(cancellationToken);
+                
+                throw new Exception($"Failed to get tokens. Status: {response.StatusCode}. Details: {details}");
+            }
+            
             var tokenData = await response.Content.ReadFromJsonAsync<TokenData>(cancellationToken)
                 ?? throw new Exception("Failed to retrieve Dropbox tokens");
             
