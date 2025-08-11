@@ -2,6 +2,8 @@
 using IM.BusinessLogic.Extensions;
 using IM.Integration.Dropbox.Extensions;
 using IM.Integration.Gmail.Extensions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 
 SerilogConfiguration.Add();
@@ -21,21 +23,21 @@ TaskScheduler.UnobservedTaskException += (sender, e) =>
 try
 {
     Log.Information("App started");
-    
-    var builder = WebApplication.CreateBuilder(args);
-    builder.Host
-        .UseSerilog()
-        .UseWindowsService();
-    
-    builder.Services
-        .AddGmailIntegration(builder.Configuration)
-        .AddDropboxIntegration(builder.Configuration)
-        .AddBusinessLogic()
-        .AddHostedService<App>();
-    
-    var app = builder.Build();
 
-    app.Run();
+    var host = Host.CreateDefaultBuilder(args)
+        .UseSerilog()
+        .UseWindowsService()
+        .ConfigureServices((context, services) =>
+        {
+            services
+                .AddGmailIntegration(context.Configuration)
+                .AddDropboxIntegration(context.Configuration)
+                .AddBusinessLogic()
+                .AddHostedService<App>();
+        })
+        .Build();
+
+    host.Run();
 }
 catch (Exception ex)
 {

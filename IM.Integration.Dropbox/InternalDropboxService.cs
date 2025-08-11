@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using IM.Core.Interfaces;
-using Microsoft.Extensions.Logging;
 using IM.Integration.Dropbox.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace IM.Integration.Dropbox;

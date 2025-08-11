@@ -1,4 +1,6 @@
 ﻿using IM.Core.Interfaces;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace IM;
 

@@ -1,5 +1,5 @@
-﻿using PdfSharpCore.Pdf;
-using PdfSharpCore.Drawing;
+﻿using PdfSharpCore.Drawing;
+using PdfSharpCore.Pdf;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
