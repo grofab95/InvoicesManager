@@ -1,5 +1,6 @@
 ﻿using IM;
 using IM.BusinessLogic.Extensions;
+using IM.Core.Interfaces;
 using IM.Integration.Dropbox.Extensions;
 using IM.Integration.Gmail.Extensions;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +32,8 @@ try
         {
             services
                 .AddGmailIntegration(context.Configuration)
-                .AddDropboxIntegration(context.Configuration)
+                .AddSingleton<IStorageService, LocalStorageService>()
+                //.AddDropboxIntegration(context.Configuration)
                 .AddBusinessLogic()
                 .AddHostedService<App>();
         })
