@@ -48,6 +48,11 @@ public class DropboxTokenValidator : IDropboxTokenValidator
 
     private async Task SaveTokenToFile(TokenData token, CancellationToken cancellationToken)
     {
+        if (string.IsNullOrEmpty(token.AccessToken) || string.IsNullOrEmpty(token.RefreshToken))
+        {
+            throw new InvalidOperationException("Access token or refresh token is null or empty");
+        }
+        
         var json = JsonSerializer.Serialize(token, new JsonSerializerOptions { WriteIndented = true });
         await File.WriteAllTextAsync(TokenFile, json, cancellationToken);
     }
